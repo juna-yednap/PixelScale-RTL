@@ -1,0 +1,1 @@
+iverilog tb.v top.v ./components/div.v ./components/mul.v ./components/transform.v 

@@ -1,0 +1,42 @@
+`timescale 1ns / 1ps
+
+// Number of channels = 1 (Grayscle)
+// Number of channels = 3 (RGB)
+
+module top #(
+    parameter H_IN  = 480,
+    parameter W_IN  = 640,
+    parameter H_OUT = 1080,
+    parameter W_OUT = 1920,
+    parameter NO_OF_CHANNELS = 1
+)(
+    input  clk,
+    input  reset,
+    output reg done
+);
+
+reg [7:0] input_image[0:(H_IN * W_IN * NO_OF_CHANNELS - 1)];
+reg [7:0] output_image[0:(H_OUT * W_OUT * NO_OF_CHANNELS - 1)];
+
+reg write_done;
+
+initial begin
+    done = 0;
+    write_done = 0;
+    $readmemh("input.hex", input_image);
+end
+
+// ------------------------------------
+// PLACE YOUR SCALING LOGIC HERE
+// When computation finishes:
+// done <= 1;
+// ------------------------------------
+
+always @(posedge clk) begin
+    if (done && !write_done) begin
+        write_done <= 1;
+        $writememh("output.hex", output_image);
+    end
+end
+
+endmodule
